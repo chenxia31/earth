@@ -15,10 +15,14 @@ def main(lr, train_path, eval_path, pred_path):
     """
     # Load training set
     x_train, y_train = util.load_dataset(train_path, add_intercept=False)
+    x_eval,y_eval=util.load_dataset(eval_path,add_intercept=False)
 
     # *** START CODE HERE ***
     # Fit a Poisson Regression model
     # Run on the validation set, and use np.savetxt to save outputs to pred_path
+    clf=PoissonRegression(step_size=lr,eps=1e-5)
+    clf.fit(x_train,y_train)
+    print(clf.predict(x_train))
     # *** END CODE HERE ***
 
 
@@ -39,6 +43,17 @@ class PoissonRegression(LinearModel):
             y: Training example labels. Shape (m,).
         """
         # *** START CODE HERE ***
+        m, n = x.shape
+        if self.theta is None:
+            self.theta = np.zeros(n)
+    
+        for _ in range(self.max_iter):
+            step = self.step_size * x.T @ (y - np.exp(x@self.theta))
+            if np.linalg.norm(step, 1) <= self.eps:
+                self.theta += step
+                break
+            else:
+                self.theta += step
         # *** END CODE HERE ***
 
     def predict(self, x):
@@ -51,4 +66,8 @@ class PoissonRegression(LinearModel):
             Floating-point prediction for each input, shape (m,).
         """
         # *** START CODE HERE ***
+        return np.exp(x@self.theta)
         # *** END CODE HERE ***
+train_path='../data/ds3_train.csv'
+valid_path='../data/ds3_valid.csv'
+main(0,train_path=train_path,eval_path=valid_path,pred_path='e')
