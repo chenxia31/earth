@@ -23,3 +23,13 @@ GitHub仓库中千万不能保存敏感信息
 git checkout -b 'md' 创建并转移到md分支
 
 如何合并两个分支，可以通过将 【分支】和【分支】合并即可；合并之后可以删除没有用的分支
+git checkout [branchname] 或者 git switch branchname
+git merge [brachname] // in other branch environment
+git branch -d [branchname]
+当一个file在branchA中修改，在branchB中修改，此时git merge就会导致conflict得产生，这个时候需要手动修改代码
+在实际开发中的策略应该包括：
+- main 非常稳定的，仅仅用于发布新的版本
+- dev 用于开发的版本，等到成熟之后才把dev版本合并到main中
+- 每个人可以在dev的分支上干活，每个人都有自己的分支，可以往dev上merge
+![16777475726656](https://chenxia31blog.oss-cn-hangzhou.aliyuncs.com/2023/03/16777475726656.jpg?chenxia31blog/sample.jpg?x-oss-process=style/stylename)
+
